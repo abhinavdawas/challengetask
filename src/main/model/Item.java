@@ -3,11 +3,19 @@ package main.model;
 import java.math.BigDecimal;
 
 public class Item {
+
+    private int quantity;
     private String name;
     private BigDecimal price;
     private boolean isImported;
     private boolean isExempt;
 
+    public int getQuantity() {
+        return quantity;
+    }
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
     public String getName() {
         return name;
     }
@@ -43,11 +51,11 @@ public class Item {
     public Item() {
     }
 
-    public Item(String name, BigDecimal price, boolean isImported, boolean isExempt) {
+    public Item(int quantity, String name, BigDecimal price, boolean isImported, boolean isExempt) {
+        this.quantity = quantity;
         this.name = name;
         this.price = price;
         this.isImported = isImported;
         this.isExempt = isExempt;
     }
-
 }

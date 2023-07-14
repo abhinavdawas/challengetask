@@ -1,5 +1,6 @@
 package test;
 
+
 import main.utils.CalculationLogic;
 import static org.junit.Assert.*;
 import org.junit.*;
@@ -9,19 +10,15 @@ import java.math.*;
 public class CalculationLogicTest {
     @Test
     public void testGetPrice(){
-        Item item = new Item("book",new BigDecimal(10), true, true);
-        Item[] items = new Item[1];
-        items[0] = item;
-        CalculationLogic calculationLogic = new CalculationLogic(items);
-        assertEquals(new BigDecimal(10),calculationLogic.getPrice(item));
+        Item item = new Item(1, "book",new BigDecimal(10), true, true);
+        CalculationLogic calculationLogic = new CalculationLogic();
+        assertEquals(new BigDecimal(10),calculationLogic.getPriceWithoutTax(item));
     }
 
     @Test
     public void getPriceWithTax(){
-        Item item = new Item("book",new BigDecimal(10), true, true);
-        Item[] items = new Item[1];
-        items[0] = item;
-        CalculationLogic calculationLogic = new CalculationLogic(items);
+        Item item = new Item(1, "book",new BigDecimal(10), true, true);
+        CalculationLogic calculationLogic = new CalculationLogic();
         assertEquals(new BigDecimal("10.50"),calculationLogic.getPriceWithTax(item));
     }
 

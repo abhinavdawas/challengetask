@@ -1,7 +1,9 @@
 package main;
 
+import main.model.Basket;
 import main.model.Item;
-import main.utils.CalculationLogic;
+
+import main.utils.Receipt;
 
 import java.math.BigDecimal;
 import java.util.Scanner;
@@ -14,10 +16,14 @@ public class Main {
         int numItems = scanner.nextInt();
         scanner.nextLine(); // Consume the newline character
 
-        Item[] items = new Item[numItems];
-        CalculationLogic calculationLogic = new CalculationLogic(items);
+        Basket basket = new Basket();
 
         for (int i = 0; i < numItems; i++) {
+
+            System.out.print("Enter item " + (i + 1) + " quantity: ");
+             int quantity = scanner.nextInt();
+              scanner.nextLine(); // Consume the newline character
+
             System.out.print("Enter item " + (i + 1) + " name: ");
             String name = scanner.nextLine();
 
@@ -33,21 +39,13 @@ public class Main {
             boolean isExempt = scanner.nextBoolean();
             scanner.nextLine(); // Consume the newline character
 
-            items[i] = new Item(name, price, isImported, isExempt);
+            Item item = new Item(quantity,name, price, isImported, isExempt);
+            basket.addItem(item);
         }
-
         scanner.close();
 
-        BigDecimal totalSalesTaxes = BigDecimal.ZERO;
-        BigDecimal totalAmount = BigDecimal.ZERO;
-
-        for (Item item : items) {
-            totalSalesTaxes = totalSalesTaxes.add(calculationLogic.getPriceWithTax(item).subtract(calculationLogic.getPrice(item)));
-            totalAmount = totalAmount.add(calculationLogic.getPriceWithTax(item));
-            System.out.println(calculationLogic.toString(item));
-        }
-
-        System.out.println("Sales Taxes: " + totalSalesTaxes);
-        System.out.println("Total: " + totalAmount);
+        // Generate and print the receipt
+        Receipt receipt = new Receipt(basket);
+        receipt.printReceipt();
     }
 }

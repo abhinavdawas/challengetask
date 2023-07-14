@@ -5,37 +5,30 @@ import main.model.Item;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class CalculationLogic {
+public class CalculationLogic implements Taxes {
 
-    private Item[] items;
-
-    public CalculationLogic(Item[] items) {
-        this.items = items;
+    public CalculationLogic() {
     }
-
-    public BigDecimal getPrice(Item item) {
-        return item.getPrice();
+   public BigDecimal getPriceWithoutTax(Item item){
+        return item.getPrice().multiply(new BigDecimal(item.getQuantity()));
     }
-
     public BigDecimal getPriceWithTax(Item item) {
-        BigDecimal tax = BigDecimal.ZERO;
+       BigDecimal tax = BigDecimal.ZERO;
         if (!item.isExempt()) {
-            tax = tax.add(item.getPrice().multiply(new BigDecimal("0.10")));
+            tax = tax.add(getPriceWithoutTax(item).multiply(taxRate));
         }
         if (item.isImported()) {
-            tax = tax.add(item.getPrice().multiply(new BigDecimal("0.05")));
+            tax = tax.add(getPriceWithoutTax(item).multiply(importDuty));
         }
-        return item.getPrice().add(roundTax(tax));
+        return getPriceWithoutTax(item).add(tax);
     }
 
     public BigDecimal roundTax(BigDecimal tax) {
-        BigDecimal roundedTax = tax.divide(new BigDecimal("0.05"), 0, RoundingMode.UP)
-                .multiply(new BigDecimal("0.05"));
-        return roundedTax.setScale(2, RoundingMode.HALF_UP);
+        return tax.setScale(2, RoundingMode.HALF_UP);
     }
 
     public String toString(Item item) {
-        return "1 " + item.getName() + ": " + getPriceWithTax(item);
+        return item.getQuantity() +  " " + (item.isImported() ? "imported " : "") + item.getName() + ": " + getPriceWithTax(item);
     }
 
     }
